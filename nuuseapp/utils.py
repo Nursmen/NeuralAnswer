@@ -31,8 +31,11 @@ def rate():
 
                 rate = (f"Курс валют на продажу: доллар - {currency_usd_word} сом, евро - {currency_eur_word} сом, "
                         f"рубль - {currency_rub_word} сом, тенге - {currency_kzt_word} сом")
-                return rate
-            
+        
+                ratenu = (f"Курс валют на продажу: доллар - {currency_usd} сом, евро - {currency_eur} сом, "
+                    f"рубль - {currency_rub} сом, тенге - {currency_kzt} сом")
+                return rate, ratenu
+    
     else:
         return "Валюта не найдена!"
 
@@ -57,8 +60,9 @@ def weather(city, city_translation):
     humidity_word = num2words(humidity, lang='ru', to='cardinal')
 
     weather = f'Погода в {translated_city}: {weather_description}, Температура: {temperature_word} градусов по цельсию, Влажность: {humidity_word} процента'.replace('запятая', '')
+    weathernu = f'Погода в {translated_city}: {weather_description}, Температура: {temperature} градусов по цельсию, Влажность: {humidity} процента'.replace('запятая', '')
 
-    return weather
+    return weather, weathernu
 
 import requests
 from bs4 import BeautifulSoup
@@ -90,7 +94,12 @@ def rate_en():
                         f"for euro is {currency_eur_word} som, "
                         f"for ruble is {currency_rub_word} som, "
                         f"and for tenge is {currency_kzt_word} som")
-                return rate
+                
+                ratenu = (f"The exchange rate for dollar is {currency_usd}  som, "
+                        f"for euro is {currency_eur} som, "
+                        f"for ruble is {currency_rub} som, "
+                        f"and for tenge is {currency_kzt} som")
+                return rate, ratenu
             
     else:
         return "Currency not found!"
@@ -121,8 +130,9 @@ def weather_en(city):
     humidity_word = num2words((humidity), lang='en')
 
     weather = f'Weather in {city}: Temperature: {temperature_word} degrees Celsius, Humidity: {humidity_word} percent'
+    weathernu = f'Weather in {city}: Temperature: {temperature} degrees Celsius, Humidity: {humidity} percent'
 
-    return weather
+    return weather, weathernu
 
 
 
@@ -159,8 +169,9 @@ def current_time_ru():
     minute_word = num2words(minute, lang='ru', to='cardinal')
     
     result = f"Сегодня в Бишкеке {day_word} {month_word}, текущее время {hour_word} {minute_word}."
+    resultnu = f"Сегодня в Бишкеке {day} {month}, текущее время {hour} {minute}."
     
-    return result
+    return result, resultnu
 
 
 def current_time_en():
@@ -179,4 +190,12 @@ def current_time_en():
         minute_word,
         time_period
     )
-    return display
+
+    displaynu = "Today in Bishkek it is {0} of {1}, and the current time is {2} {3} {4}.".format(
+        day_ordinal,
+        month_name,
+        current_time.hour if current_time.hour <= 12 else current_time.hour - 12,
+        current_time.minute,
+        time_period
+    )
+    return display, displaynu

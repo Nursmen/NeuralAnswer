@@ -30,9 +30,6 @@ for i in objects:
     dig[i.question] = i.answer
     questions.append(i.question)
 
-questions.append('Какая сейчас погода?')
-questions.append('Какой курс валюты сом к дургим валютам')
-questions.append('Который час или сколько время.')
 dig['WARNING'] = "Обратитесь к сотруднику таможни"
 
 import numpy as np
@@ -42,7 +39,7 @@ sth = []
 for i, j in enumerate(questions):
     sth.append(embed_bert_cls(j, modelemb, tokenizer))   
     
-def index(request, text='Который час'):
+def index(request, text='Какая погода в Лондоне'):
 
     response = find(text, sth, questions)
 
@@ -67,13 +64,13 @@ def find(word, sth, context):
 
             _ = [city:=i if i[0].isupper() else None for i in word.split(' ')[1:]]
 
-            return weather(ts.translate_text(city, from_language='ru', to_language='en'), city)
+            return weather(ts.translate_text(city, from_language='ru', to_language='en', translator='google'), city)
         
-        elif context[idx] == 'Какой курс валюты сом к дургим валютам':
+        elif context[idx] == 'Какой курс валюты сом к дургим валютам?':
             
             return rate()
         
-        elif context[idx] == 'Который час или сколько время.':
+        elif context[idx] in ['Сколько время?', 'Который час?']:
 
             return current_time_ru()
 
