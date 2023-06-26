@@ -140,6 +140,39 @@ def weather_en(city):
 import datetime
 from num2words import num2words
 
+
+import requests
+
+def get_current_time(country):
+    geocodio_api_key = '5a8d549e4546e34934d88d56ab4e534a946ac45'
+    worldtimeapi_url = "http://worldtimeapi.org/api/timezone"
+
+    # Step 1: Convert country name to latitude and longitude using Geocodio API
+    geocodio_url = f"https://api.geocod.io/v1.6/geocode?q={country}&api_key={geocodio_api_key}"
+    response = requests.get(geocodio_url)
+    if response.status_code == 200:
+        data = response.json()
+        results = data['results']
+        if results:
+            lat = results[0]['location']['lat']
+            lng = results[0]['location']['lng']
+        else:
+            return "Error: Location not found."
+    else:
+        return "Error: Unable to retrieve location."
+
+    # Step 2: Get time zone from latitude and longitude using WorldTimeAPI
+    worldtimeapi_url += f"/geo?lat={lat}&lng={lng}"
+    response = requests.get(worldtimeapi_url)
+    if response.status_code == 200:
+        data = response.json()
+        timezone = data['timezone']
+        current_time = data['datetime']
+        return timezone, current_time
+    else:
+        return "Error: Unable to retrieve time."
+
+
 def current_time_ru():
     days = {
         1: "первое", 2: "второе", 3: "третье", 4: "четвертое", 5: "пятое",
@@ -157,6 +190,8 @@ def current_time_ru():
     }
     
     now = datetime.datetime.now()
+
+    print(get_current_time('Bishkek'))
     
     day = now.day
     month = now.month
