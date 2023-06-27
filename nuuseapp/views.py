@@ -68,8 +68,7 @@ for i, j in enumerate(questions_en):
 
 
 
-def index(request, text='What is the rate of som against dollar', lang='en'):
-
+def index(request, text='Кому дать на лапу?', lang='ru'):
 
     something = sth if lang == 'ru' else sth_en
     context = questions if lang == 'ru' else questions_en
@@ -95,13 +94,16 @@ def find(word, sth, context, lang):
 
     for j,i in enumerate(sth):
 
-        score = nn.functional.cosine_similarity(torch.from_numpy(i), torch.from_numpy(embed_bert_cls(word, model, token)), 0)
+        score = nn.functional.pairwise_distance(torch.from_numpy(i), torch.from_numpy(embed_bert_cls(word, model, token)), 2)
 
         scores.append(score)
 
-    idx = np.argmax(np.array(scores))
+    idx = np.argmin(np.array(scores))
 
-    if scores[idx] > 0.85:
+    print(scores)
+    print(context)
+
+    if scores[idx] < 0.6:
 
         if context[idx] == 'Какая сейчас погода?':
 
